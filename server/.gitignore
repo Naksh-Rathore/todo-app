@@ -1,2 +1,5 @@
 .venv/
 db.sqlite3
+todoapp/todoapp/__pycache__/
+todoapp/accounts/__pycache__/
+todoapp/accounts/migrations/__pycache__/
