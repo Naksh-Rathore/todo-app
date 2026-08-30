@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import TodoSerializer
 from .models import Todo
 
-class TodoView(APIView):
+class TodoCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -30,3 +30,14 @@ class TodoView(APIView):
         serializer = TodoSerializer(todos, many=True)
 
         return Response(serializer.data)
+
+class TodoChangeDone(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, todo_id):
+        todo = Todo.objects.get(id=todo_id, user=request.user)
+        todo.is_done = not todo.is_done
+
+        todo.save()
+
+        return Response({"message": "Todo changed successfully"}, status=status.HTTP_201_CREATED)
