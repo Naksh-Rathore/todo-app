@@ -31,7 +31,7 @@ class TodoCreateView(APIView):
 
         return Response(serializer.data)
 
-class TodoChangeDone(APIView):
+class TodoChangeDoneDelete(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, todo_id):
@@ -41,3 +41,11 @@ class TodoChangeDone(APIView):
         todo.save()
 
         return Response({"message": "Todo changed successfully"}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, todo_id):
+        todo = Todo.objects.get(id=todo_id, user=request.user)
+        todo.delete()        
+
+        return Response({"message": "Todo deleted successfully"}, status=status.HTTP_201_CREATED)
+
+
