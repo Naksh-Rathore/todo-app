@@ -1,2 +1,2 @@
 # todo-app
-Todo app written in Django and ReactJS
+Todo app written in Django
