@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'todos',
+    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -134,4 +137,12 @@ MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),   # short-lived
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),      # expires if unused
+    'ROTATE_REFRESH_TOKENS': True,                    # each refresh returns a new refresh token
+    'BLACKLIST_AFTER_ROTATION': True,                 # old refresh token becomes invalid
+    'UPDATE_LAST_LOGIN': True,
 }
