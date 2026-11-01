@@ -1,0 +1,25 @@
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: none;
+    margin: 0;
+    margin-top: auto;
+    background-color: hsla(0, 0%, 50%, 0.25);
+    font-family: Inter, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, Sans-Serif;
+    color: hsla(0, 0%, 0%, 0.5);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.githublink {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    cursor: pointer;
+    transition: 0.25s ease;
+    transform: scale(0.7);
+}
