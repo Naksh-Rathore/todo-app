@@ -56,5 +56,4 @@
 
 .signinbtn:hover {
   background-color: hsl(250, 80%, 55%);
-  box-shadow: 0 6px 16px hsla(250, 80%, 60%, 0.5);
 }
