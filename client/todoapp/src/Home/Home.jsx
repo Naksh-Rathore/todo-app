@@ -1,7 +1,11 @@
 import styles from "./Home.module.css";
 
+import Header from "./Header/Header.jsx"
+
 export default function Home() {
     return (
-        <h1>Home</h1>
+        <div className={styles.container}>
+            <Header/>
+        </div>
     );
 }
