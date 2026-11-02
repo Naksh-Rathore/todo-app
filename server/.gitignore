@@ -8,3 +8,6 @@ todoapp/accounts/migrations/__pycache__/
 
 todoapp/todos/__pycache__/
 todoapp/todos/migrations/__pycache__/
+
+testimonials/todos/__pycache__/
+testimonials/todos/migrations/__pycache__/

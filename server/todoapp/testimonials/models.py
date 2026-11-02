@@ -4,4 +4,5 @@ from django.db import models
 class Testimonial(models.Model):
     name = models.CharField(max_length=50)
     review = models.TextField()
-    image = models.URLField(max_length=500)
+    imageURL = models.URLField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to="images/", blank=True, null=True)
