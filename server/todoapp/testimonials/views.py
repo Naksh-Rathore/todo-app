@@ -6,8 +6,8 @@ from rest_framework.decorators import api_view
 
 @api_view(['GET'])
 def get_all_testimonials(request):
-    testimonial = Testimonial.objects.all()
-    testimonial_serializer = TestimonialSerializer(testimonial)
+    testimonials = Testimonial.objects.all()
+    testimonial_serializer = TestimonialSerializer(testimonials, many=True)
 
     return Response(testimonial_serializer.data)
-    
+        
