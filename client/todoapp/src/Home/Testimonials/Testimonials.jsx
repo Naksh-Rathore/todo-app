@@ -6,12 +6,11 @@ import axios from "axios";
 
 export default function Testimonials() {
     const testimonials = useRef();
-    const currentTestimonial = useState();
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/testimonials')
             .then(response => {
-                console.log(response.data);
+                testimonials.current = response.data;
             })
             .catch(error => {
                 console.error('Request failed:', error.message);
