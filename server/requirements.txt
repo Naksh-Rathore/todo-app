@@ -3,3 +3,4 @@ djangorestframework
 djangorestframework-simplejwt
 isort
 pillow
+django-cors-headers
