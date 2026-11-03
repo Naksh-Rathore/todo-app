@@ -12,7 +12,7 @@ export default function Testimonials() {
         axios.get('http://localhost:8000/api/testimonials')
             .then(response => {
                 testimonials.current = response.data;
-                setCurrentTestimonial(testimonials.current[0]);
+                setCurrentTestimonial(testimonials.current[currentIndex.current]);
             })
             .catch(error => {
                 console.error('Request failed:', error.message);
