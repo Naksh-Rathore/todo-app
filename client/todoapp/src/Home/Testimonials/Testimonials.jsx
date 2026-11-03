@@ -23,10 +23,10 @@ export default function Testimonials() {
         <section className={styles.container}>
             <h2 className={styles.header}>Our Testimonials</h2>
             
-            <article>
-                <img src={currentTestimonial?.imageURL}/>
-                <h2>{currentTestimonial?.name}</h2>
-                <p>{currentTestimonial?.review}</p>
+            <article className={styles.testimonial}>
+                <img src={currentTestimonial?.imageURL} className={styles.pfp}/>
+                <h2 className={styles.name}>{currentTestimonial?.name}</h2>
+                <p className={styles.review}>{currentTestimonial?.review}</p>
             </article>
         </section>
     )
