@@ -6,6 +6,7 @@ import axios from "axios";
 export default function Testimonials() {
     const testimonials = useRef([]);
     const currentIndex = useRef(0);
+
     const [currentTestimonial, setCurrentTestimonial] = useState();
 
     useEffect(() => {
@@ -17,13 +18,22 @@ export default function Testimonials() {
             .catch(error => {
                 console.error('Request failed:', error.message);
             });
+
+        const intervalID = setInterval(() => {
+            currentIndex.current = (currentIndex.current + 1) % testimonials.current.length;
+            setCurrentTestimonial(testimonials.current[currentIndex.current]);
+        }, 3000);
+
+        return () => {
+            clearInterval(intervalID);
+        };
     }, []);
 
     return (
         <section className={styles.container}>
             <h2 className={styles.header}>Our Testimonials</h2>
             
-            <article className={styles.testimonial}>
+            <article key={currentIndex.current} className={styles.testimonial}>
                 <img src={currentTestimonial?.imageURL} className={styles.pfp}/>
                 <h2 className={styles.name}>{currentTestimonial?.name}</h2>
                 <p className={styles.review}>{currentTestimonial?.review}</p>
