@@ -26,6 +26,7 @@
     text-align: center;
     box-shadow: 0 2px 4px rgba(40, 55, 80, 0.12),
                 0 8px 24px rgba(40, 55, 80, 0.18);
+    transition: 1s ease;
 }
 
 .pfp {
