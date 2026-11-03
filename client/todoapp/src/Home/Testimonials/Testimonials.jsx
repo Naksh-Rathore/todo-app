@@ -1,16 +1,18 @@
 import styles from "./Testimonials.module.css";
-import Testimonial from "./Testimonial/Testimonial";
 
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 export default function Testimonials() {
-    const testimonials = useRef();
+    const testimonials = useRef([]);
+    const currentIndex = useRef(0);
+    const [currentTestimonial, setCurrentTestimonial] = useState();
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/testimonials')
             .then(response => {
                 testimonials.current = response.data;
+                setCurrentTestimonial(testimonials.current[0]);
             })
             .catch(error => {
                 console.error('Request failed:', error.message);
@@ -20,6 +22,12 @@ export default function Testimonials() {
     return (
         <section className={styles.container}>
             <h2 className={styles.header}>Our Testimonials</h2>
+            
+            <article>
+                <img src={currentTestimonial?.imageURL}/>
+                <h2>{currentTestimonial?.name}</h2>
+                <p>{currentTestimonial?.review}</p>
+            </article>
         </section>
     )
 }

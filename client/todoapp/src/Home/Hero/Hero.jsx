@@ -7,7 +7,7 @@ export default function Hero() {
                 <h1>Todo App</h1>
                 <h3>The app for the superior</h3>
 
-                <button className={styles.signinbtn}>Sign In</button>
+                <button className={styles.signinbtn}>Sign Up</button>
             </div>
 
             <img className={styles.img} src="/todo.jpg"/>
