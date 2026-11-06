@@ -5,7 +5,7 @@ export default function Hero() {
         <section className={styles.hero}>
             <div className={styles.textContainer}>
                 <h1>Todo App</h1>
-                <h3>The app for the superior</h3>
+                <h3>Take notes brilliantly</h3>
 
                 <button className={styles.signinbtn}>Sign Up</button>
             </div>
