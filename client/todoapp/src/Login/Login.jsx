@@ -3,6 +3,8 @@ import styles from "./Login.module.css";
 import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 
+import LoginForm from "./LoginForm/LoginForm.jsx";
+
 export default function Login() {
     return (
         <div className={styles.container}>
@@ -12,7 +14,9 @@ export default function Login() {
                 </Header>
             </div>
 
-            <Footer/>
+            <LoginForm />
+
+            <Footer />
         </div>
     );
 }
