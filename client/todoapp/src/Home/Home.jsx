@@ -9,8 +9,12 @@ export default function Home() {
     return (
         <div className={styles.container}>
             <Header/>
+
             <Hero/>
             <Testimonials/>
+
+            <h3 className={styles.ending}>So start using Todo App today!</h3>
+
             <Footer/>
         </div>
     );
