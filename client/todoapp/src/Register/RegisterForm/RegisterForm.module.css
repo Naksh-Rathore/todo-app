@@ -1,0 +1,65 @@
+.registerForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    text-align: center;
+
+    width: 25%;
+    min-height: 45vh;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+
+    background-color: hsl(45, 29%, 97%);
+
+    padding: 25px;
+
+    border-radius: 7px;
+    border: 10px solid whitesmoke;
+
+    font-family: Inter, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, Sans-Serif;
+
+    box-shadow: 0 10px 30px hsla(0, 0%, 0%, 0.25);
+}
+
+.subtitle {
+    margin-top: 0;
+    margin-bottom: auto;
+    font-size: 2rem;
+}
+
+.registerinputs {
+    margin-top: 0;
+    margin-bottom: auto;
+}
+
+.inputFields {
+    margin-bottom: 30px;
+    font-size: 1.25rem;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid grey;
+}
+
+.labels {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.submitButton {
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.submitButton:hover {
+    background-color: hsl(39, 100%, 45%);
+}
