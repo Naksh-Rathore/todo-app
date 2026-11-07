@@ -42,9 +42,8 @@
   color: hsl(0, 0%, 40%);
 }
 
-.signinbtn {
+.signupbtn {
   background-color: hsl(39, 100%, 50%);
-  color: white;
   border: none;
   border-radius: 8px;
   padding: 10px 24px;
@@ -52,6 +51,15 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.signupbtn:hover {
+  background-color: hsl(39, 100%, 45%);
+}
+
+.signuplink {
+  text-decoration: none;
+  color: white;
 }
 
 .signinbtn:hover {
