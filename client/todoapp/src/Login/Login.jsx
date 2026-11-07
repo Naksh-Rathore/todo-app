@@ -10,7 +10,7 @@ export default function Login() {
         <div className={styles.container}>
             <div className={styles.headerWrapper}>
                 <Header>
-                    <h3 className={styles.text}>Sign In</h3>
+                    <h3 className={styles.text}>Log In</h3>
                 </Header>
             </div>
 
