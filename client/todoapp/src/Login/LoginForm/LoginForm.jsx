@@ -13,7 +13,7 @@ export default function LoginForm() {
                 <input className={styles.inputFields} type="password" placeholder="Password"/>
             </div>
 
-            <button className={styles.submitButton} type="submit">Submit</button>
+            <button className={styles.submitButton} type="submit">Log In</button>
         </form>
     );
 }
