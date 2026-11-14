@@ -6,7 +6,7 @@ class Project(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     # Every project is owned by a user
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects", default=1)
 
 class PriorityChoices(models.IntegerChoices):
     Low = 1
