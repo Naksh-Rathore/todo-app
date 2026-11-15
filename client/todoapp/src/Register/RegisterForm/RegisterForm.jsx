@@ -14,7 +14,7 @@ export default function RegisterForm() {
     const registerUser = async e => {
         e.preventDefault(); // Prevents page from refreshing when submitting
 
-        if (password != retypedPassword) {
+        if (password !== retypedPassword) {
             setRegisterMsgColor("#FF0000");
             setRegisterMsg("Passwords did not match");
             setRetypedPassword(""); // Not resetting password as well because that is very annoying
