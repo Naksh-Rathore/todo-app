@@ -1,6 +1,7 @@
 import styles from "./RegisterForm.module.css";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function RegisterForm() {
@@ -10,6 +11,8 @@ export default function RegisterForm() {
 
     const [registerMsg, setRegisterMsg] = useState("");
     const [registerMsgColor, setRegisterMsgColor] = useState("#000000");
+
+    const navigate = useNavigate();
 
     const registerUser = async e => {
         e.preventDefault(); // Prevents page from refreshing when submitting
@@ -35,7 +38,7 @@ export default function RegisterForm() {
             setRegisterMsgColor("#000000");
             setRegisterMsg("Successfuly registered user. Taking to sign in...");
 
-            // Take user to /home route
+            navigate("/login");
         }
 
         catch (error) {
