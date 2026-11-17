@@ -33,7 +33,7 @@ export default function RegisterForm() {
         };
 
         try {
-            const response = await axios.post(url, payload);
+            await axios.post(url, payload);
 
             setRegisterMsgColor("#000000");
             setRegisterMsg("Successfuly registered user. Taking to sign in...");
