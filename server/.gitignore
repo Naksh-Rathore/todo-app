@@ -11,3 +11,5 @@ todoapp/todos/migrations/__pycache__/
 
 todoapp/testimonials/__pycache__/
 todoapp/testimonials/migrations/__pycache__/
+
+.env
