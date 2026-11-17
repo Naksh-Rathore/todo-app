@@ -18,11 +18,16 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
 
+from dotenv import load_dotenv
+from os import getenv
+
 urlpatterns = [
     path("api/accounts/", include("accounts.urls")),
     path("api/todos/", include("todos.urls")),
     path('api/testimonials/', include("testimonials.urls")),
 ]
 
-if settings.DEBUG:
-    urlpatterns.append(path("admin/", admin.site.urls))    
+load_dotenv()
+
+if getenv("ENABLE_ADMIN_PANEL", "").lower() in ("true", "1", "yes"):
+    urlpatterns.append(path("admin/", admin.site.urls))

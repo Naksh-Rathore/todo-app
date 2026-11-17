@@ -4,3 +4,4 @@ djangorestframework-simplejwt
 isort
 pillow
 django-cors-headers
+dotenv
