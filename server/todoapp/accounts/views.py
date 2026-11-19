@@ -1,78 +1,97 @@
+from django.conf import settings
 from django.contrib.auth import authenticate
+from django.middleware import csrf
+from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.conf import settings
-from django.middleware import csrf
 
 from .serializers import UserSerializer
 
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        "refresh": str(refresh),
+        "access": str(refresh.access_token),
+    }
+
+
 class RegisterView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
     def post(self, request):
         serializer = UserSerializer(data=request.data)
-
-        valid = serializer.is_valid()
-
-        if valid:
-            user = serializer.save()
-
+        if serializer.is_valid():
+            serializer.save()
             return Response(
                 {"message": "User created successfully"},
                 status=status.HTTP_201_CREATED,
             )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
-        
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
     def post(self, request):
-        data = request.data
-        response = Response()
+        username = request.data.get("username")
+        password = request.data.get("password")
 
-        username = data.get("username", None)
-        password = data.get("password", None)
-        # Email not needed
+        user = authenticate(request, username=username, password=password)
 
-        user = authenticate(username=username, password=password)
+        if user is None:
+            return Response(
+                {"detail": "Invalid username or password."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
-        if user is not None:
-            return Response({"Invalid" : "Invalid username or password!!"},status=status.HTTP_404_NOT_FOUND)
+        if not user.is_active:
+            return Response(
+                {"detail": "This account is not active."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
-        if user.is_active is None:
-            return Response({"No active" : "This account is not active!!"},status=status.HTTP_404_NOT_FOUND)
+        tokens = get_tokens_for_user(user)
 
-        response_data = get_tokens_for_user(user)
+        response = Response(
+            {"detail": "Login successful", "access": tokens["access"]},
+            status=status.HTTP_200_OK,
+        )
 
         response.set_cookie(
-            key = settings.SIMPLE_JWT['AUTH_COOKIE'], 
-            value = response_data["refresh"],
-            expires = settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-            secure = settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-            httponly = settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-            samesite = settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+            key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+            value=tokens["refresh"],
+            max_age=int(settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()),
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+            httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
         )
 
         csrf.get_token(request)
-        response.data = {"Success" : "Login successfully","data": response_data}
-        
         return response
+
 
 class LogoutView(APIView):
     def post(self, request):
-        refresh_token = request.COOKIES.get(settings.SIMPLE_JWT["AUTH_COOKIE"])
-        token = RefreshToken(refresh_token)
+        cookie_name = settings.SIMPLE_JWT["AUTH_COOKIE"]
+        refresh_token = request.COOKIES.get(cookie_name)
 
-        token.blacklist()
+        if refresh_token:
+            try:
+                RefreshToken(refresh_token).blacklist()
+            except TokenError:
+                pass
 
-        return Response({"Logout sucessful"})
+        response = Response(
+            {"detail": "Logout successful"}, status=status.HTTP_200_OK
+        )
+        response.delete_cookie(
+            cookie_name,
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+        )
+        return response
