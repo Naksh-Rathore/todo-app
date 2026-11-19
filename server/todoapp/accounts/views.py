@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
 from .serializers import UserSerializer
 
@@ -34,6 +36,7 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# It is best to make logging in a wrapper around TokenObtainPairView, however this method also works
 class LoginView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -75,6 +78,42 @@ class LoginView(APIView):
         csrf.get_token(request)
         return response
 
+# It is best to make logging in a wrapper around TokenRefreshView, however this method also works
+class CookieTokenRefreshView(APIView):
+    def post(self, request):
+        cookie_name = settings.SIMPLE_JWT["AUTH_COOKIE"]
+        refresh_token = request.COOKIES.get(cookie_name)
+
+        if not refresh_token:
+            return Response(
+                {"detail": "Refresh token not found."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        serializer = TokenRefreshSerializer(data={"refresh": refresh_token})
+
+        try:
+            serializer.is_valid(raise_exception=True)
+
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        data = serializer.validated_data
+        response = Response({"access": data["access"]}, status=status.HTTP_200_OK)
+
+        new_refresh = data.get("refresh")
+        
+        if new_refresh:
+            response.set_cookie(
+                key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+                value=refresh_token,
+                max_age=int(settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()),
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            )
+
+        return response
 
 class LogoutView(APIView):
     def post(self, request):
