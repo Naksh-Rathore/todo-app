@@ -17,3 +17,6 @@ export default function App() {
         </AuthProvider>  
     );
 }
+
+// Auth Provider: Wraps around the apps requesting the tokens
+// Auth Context: The channel which the Auth Provider puts its data into so every child component can also access the values
