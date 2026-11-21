@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useLayoutEffect, useState } from "react";
+import { createContext, useContext, useLayoutEffect, useState } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -7,13 +7,13 @@ export default function AuthProvider({ children }) {
     const [token, setToken] = useState(); // Keep the token only in application memory so it is less vulnerable to XSS
 
     const login = async (credentials) => {
-        const { data } = await axios.post("http://localhost:8000/api/accounts/login", credentials);
+        const { data } = await axios.post("http://localhost:8000/api/accounts/login/", credentials);
         setToken(data.access);
     };
 
     const logout = async () => {
         try {
-            await axios.post("http://localhost:8000/api/accounts/logout"); // Lets the server clear the refresh cookie
+            await axios.post("http://localhost:8000/api/accounts/logout/"); // Lets the server clear the refresh cookie
         } catch (_) {}
 
         setToken(null);
@@ -38,7 +38,7 @@ export default function AuthProvider({ children }) {
                 originalRequest._retry = true;
 
                 try {
-                    const refreshResponse = await axios.post("http://localhost:8000/api/accounts/login/refresh");
+                    const refreshResponse = await axios.post("http://localhost:8000/api/accounts/login/refresh/");
                     const newAccessToken = refreshResponse.data.access;
 
                     setToken(newAccessToken);
@@ -61,7 +61,7 @@ export default function AuthProvider({ children }) {
     );
 
     return () => {
-    axios.interceptors.response.eject(refreshInterceptor);
+        axios.interceptors.response.eject(refreshInterceptor);
     };
     }, []);
 
