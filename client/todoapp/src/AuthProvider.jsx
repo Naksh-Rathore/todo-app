@@ -7,13 +7,13 @@ export default function AuthProvider({ children }) {
     const [token, setToken] = useState(); // Keep the token only in application memory so it is less vulnerable to XSS
 
     const login = async (credentials) => {
-        const { data } = await axios.post("/accounts/login", credentials);
+        const { data } = await axios.post("http://localhost:8000/accounts/login", credentials);
         setToken(data.access);
     };
 
     const logout = async () => {
         try {
-            await axios.post("/accounts/logout"); // Lets the server clear the refresh cookie
+            await axios.post("http://localhost:8000/accounts/logout"); // Lets the server clear the refresh cookie
         } catch (_) {}
 
         setToken(null);
