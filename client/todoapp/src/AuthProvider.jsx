@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useState } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -7,19 +7,19 @@ export default function AuthProvider({ children }) {
     const [token, setToken] = useState(); // Keep the token only in application memory so it is less vulnerable to XSS
 
     const login = async (credentials) => {
-        const { data } = await axios.post("http://localhost:8000/accounts/login", credentials);
+        const { data } = await axios.post("http://localhost:8000/api/accounts/login", credentials);
         setToken(data.access);
     };
 
     const logout = async () => {
         try {
-            await axios.post("http://localhost:8000/accounts/logout"); // Lets the server clear the refresh cookie
+            await axios.post("http://localhost:8000/api/accounts/logout"); // Lets the server clear the refresh cookie
         } catch (_) {}
 
         setToken(null);
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (token) {
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Add the token to our HTTP requests if it exists
         }
@@ -28,6 +28,43 @@ export default function AuthProvider({ children }) {
             delete axios.defaults.headers.common["Authorization"]; // Remove the token from our HTTP requests if it does not exist
         }
     }, [token]);
+
+    useLayoutEffect(() => {
+        const refreshInterceptor = axios.interceptors.response.use((response) => response,
+        async (error) => {
+            const originalRequest = error.config;
+
+            if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
+                originalRequest._retry = true;
+
+                try {
+                    const refreshResponse = await axios.post("http://localhost:8000/api/accounts/login/refresh");
+                    const newAccessToken = refreshResponse.data.access;
+
+                    setToken(newAccessToken);
+
+                    // Difference between this and axios.defaults.headers.common["Authorization"] is that this is for one specific request
+                    // axios.defaults.headers.common["Authorization"] is for all future requests
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`; 
+
+                    return axios(originalRequest);
+                }           
+        
+                catch (refreshError) {
+                    setToken(null);
+                    return Promise.reject(refreshError);
+                }
+            }
+
+            return Promise.reject(error);
+        }
+    );
+
+    return () => {
+    axios.interceptors.response.eject(refreshInterceptor);
+    };
+    }, []);
+
 
    return (
     <AuthContext.Provider value={{token, login, logout}}>
