@@ -1,7 +1,7 @@
 import styles from "./Register.module.css";
 
-import Header from "../Header/Header.jsx";
-import Footer from "../Footer/Footer.jsx";
+import Header from "../../Header/Header.jsx";
+import Footer from "../../Footer/Footer.jsx";
 
 import RegisterForm from "./RegisterForm/RegisterForm.jsx";
 

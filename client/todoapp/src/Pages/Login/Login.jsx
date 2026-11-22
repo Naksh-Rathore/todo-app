@@ -1,7 +1,7 @@
 import styles from "./Login.module.css";
 
-import Header from "../Header/Header.jsx";
-import Footer from "../Footer/Footer.jsx";
+import Header from "../../Header/Header.jsx";
+import Footer from "../../Footer/Footer.jsx";
 
 import LoginForm from "./LoginForm/LoginForm.jsx";
 

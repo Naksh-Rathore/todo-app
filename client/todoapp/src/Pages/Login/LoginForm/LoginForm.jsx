@@ -2,7 +2,7 @@ import styles from "./LoginForm.module.css";
 
 import { useState, useEffect } from "react";
 
-import { useAuthProvider } from "../../AuthProvider.jsx";
+import { useAuthProvider } from "../../../AuthProvider.jsx";
 
 export default function LoginForm() {
     const [username, setUsername] = useState("");
@@ -12,10 +12,10 @@ export default function LoginForm() {
 
     const submitForm = async e => {
         e.preventDefault();
-        await login({"username": username, "password": password});
+        await login({ "username": username, "password": password });
     }
 
-    useEffect(() => {   
+    useEffect(() => {
         console.log(token);
     }, [token]);
 
