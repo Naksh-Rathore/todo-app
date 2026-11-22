@@ -6,12 +6,12 @@ axios.defaults.withCredentials = true;
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
-    const [token, setTokenState] = useState();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const tokenRef = useRef(null);
 
     const setToken = (t) => {
         tokenRef.current = t;   // Available instantly
-        setTokenState(t);       // For UI re-renders
+        setIsAuthenticated(a => !a);    // For UI re-renders
     };
 
     const login = async (credentials) => {

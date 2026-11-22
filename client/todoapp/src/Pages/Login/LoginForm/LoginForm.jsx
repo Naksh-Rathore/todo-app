@@ -9,7 +9,7 @@ export default function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const { token, login } = useAuthProvider();
+    const { isAuthenticated, tokenRef, login } = useAuthProvider();
 
     const submitForm = async e => {
         e.preventDefault();
@@ -21,7 +21,7 @@ export default function LoginForm() {
         }
 
         catch (err) {
-            console.error(err.response?.status, err.response?.data); 
+            console.error(err.response?.status, err.response?.data);
         }
     }
 
