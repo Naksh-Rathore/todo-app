@@ -139,7 +139,6 @@ class UserInformationView(APIView):
     permission_classes = [IsAuthenticated]
       
     def get(self, request):
-        print(type(request.user), request.user.is_authenticated, request.user.id, request.auth)
         user = request.user
 
         return Response({"username": user.username})
