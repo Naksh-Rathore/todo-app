@@ -11,7 +11,7 @@ export default function LoginForm() {
 
     const navigate = useNavigate();
 
-    const { isAuthenticated, tokenRef, login } = useAuthProvider();
+    const { login } = useAuthProvider();
 
     const submitForm = async e => {
         e.preventDefault();
