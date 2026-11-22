@@ -11,7 +11,14 @@ export default function AuthProvider({ children }) {
 
     const setToken = (t) => {
         tokenRef.current = t;   // Available instantly
-        setIsAuthenticated(a => !a);    // For UI re-renders
+
+        if (t === null) {
+            setIsAuthenticated(a => false);    // For UI re-renders
+        }
+
+        else {
+            setIsAuthenticated(a => true);    // For UI re-renders
+        }
     };
 
     const login = async (credentials) => {
@@ -79,7 +86,7 @@ export default function AuthProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{ token, login, logout }}>
+        <AuthContext.Provider value={{ tokenRef, login, logout, isAuthenticated }}>
             {children}
         </AuthContext.Provider>
     )
