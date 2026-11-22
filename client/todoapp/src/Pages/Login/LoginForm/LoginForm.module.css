@@ -67,3 +67,7 @@
 .submitButton:hover {
     background-color: hsl(39, 100%, 45%);
 }
+
+.loginMsg {
+    color: red;
+}

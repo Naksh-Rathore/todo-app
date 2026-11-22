@@ -9,15 +9,23 @@ export default function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const [loginMsg, setLoginMsg] = useState("");
+
     const navigate = useNavigate();
 
     const { login } = useAuthProvider();
 
     const submitForm = async e => {
         e.preventDefault();
-        await login({ "username": username, "password": password });
+        
+        try {
+            await login({ "username": username, "password": password });
+            navigate("/todos");
+        }
 
-        navigate("/todos");
+        catch (error) {
+            setLoginMsg("Could not log in");
+        }
     }
 
     return (
@@ -33,6 +41,8 @@ export default function LoginForm() {
             </div>
 
             <button className={styles.submitButton} type="submit">Log In</button>
+
+            <p className={styles.loginMsg}>{loginMsg}</p>
         </form>
     );
 }
