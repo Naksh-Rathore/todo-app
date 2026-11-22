@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home.jsx";
 import Login from "./Pages/Login/Login.jsx";
 import Register from "./Pages/Register/Register.jsx";
+import Todos from "./Pages/Todos/Todos.jsx";
 
 import AuthProvider from "./AuthProvider.jsx";
 
@@ -13,6 +14,7 @@ export default function App() {
                 <Route path='/' element={<Home/>}/>
                 <Route path='/login' element={<Login/>}/>
                 <Route path='/register' element={<Register/>}/>
+                <Route path='/todos' element={<Todos/>}/>
             </Routes>  
         </AuthProvider>  
     );
