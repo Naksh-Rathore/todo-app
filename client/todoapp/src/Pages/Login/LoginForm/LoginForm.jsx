@@ -1,13 +1,15 @@
 import styles from "./LoginForm.module.css";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAuthProvider } from "../../../AuthProvider.jsx";
-import axios from "axios";
 
 export default function LoginForm() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     const { isAuthenticated, tokenRef, login } = useAuthProvider();
 
@@ -15,19 +17,8 @@ export default function LoginForm() {
         e.preventDefault();
         await login({ "username": username, "password": password });
 
-        try {
-            const response = await axios.get("http://localhost:8000/api/accounts/user/");
-            console.log(response.data);
-        }
-
-        catch (err) {
-            console.error(err.response?.status, err.response?.data);
-        }
+        navigate("/todos");
     }
-
-    useEffect(() => {
-        console.log(token);
-    }, [token]);
 
     return (
         <form className={styles.loginForm} onSubmit={submitForm}>
