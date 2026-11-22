@@ -38,9 +38,6 @@ class RegisterView(APIView):
 
 # It is best to make logging in a wrapper around TokenObtainPairView, however this method also works
 class LoginView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
-
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
@@ -99,6 +96,8 @@ class CookieTokenRefreshView(APIView):
             raise InvalidToken(e.args[0])
 
         data = serializer.validated_data
+
+        # Only include the access token in the response as the refresh token is in the HTTP-Only cookie
         response = Response({"access": data["access"]}, status=status.HTTP_200_OK)
 
         new_refresh = data.get("refresh")
