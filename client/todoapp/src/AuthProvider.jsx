@@ -30,12 +30,16 @@ export default function AuthProvider({ children }) {
     }, [token]);
 
     useLayoutEffect(() => {
+        // axios.interceptors.response.use() sets up an interceptor, which is a hook that runs on every request/response
+        // axios.interceptors.response.use() has two parameters, onSuccess and onError
+        // On success, we can just forward through the response object
+        // On an error, we ask for a new refresh token and resend the request with the new token
         const refreshInterceptor = axios.interceptors.response.use((response) => response,
         async (error) => {
-            const originalRequest = error.config;
+            const originalRequest = error.config; // The request that failed
 
             if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
-                originalRequest._retry = true;
+                originalRequest._retry = true; // ._retry is a custom field; it checks whether this request is going to be resent a 2nd time
 
                 try {
                     const refreshResponse = await axios.post("http://localhost:8000/api/accounts/login/refresh/");
@@ -44,7 +48,7 @@ export default function AuthProvider({ children }) {
                     setToken(newAccessToken);
 
                     // Difference between this and axios.defaults.headers.common["Authorization"] is that this is for one specific request
-                    // axios.defaults.headers.common["Authorization"] is for all future requests
+                    // axios.defaults.headers.common["Authorization"] is for all future requests (global header settings)
                     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`; 
 
                     return axios(originalRequest);
