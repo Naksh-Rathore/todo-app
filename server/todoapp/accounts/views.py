@@ -106,7 +106,7 @@ class CookieTokenRefreshView(APIView):
         if new_refresh:
             response.set_cookie(
                 key=settings.SIMPLE_JWT["AUTH_COOKIE"],
-                value=refresh_token,
+                value=new_refresh,
                 max_age=int(settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()),
                 secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
                 httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
