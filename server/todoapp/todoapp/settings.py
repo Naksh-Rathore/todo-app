@@ -65,10 +65,13 @@ CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ]
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
 
 ROOT_URLCONF = 'todoapp.urls'
 
