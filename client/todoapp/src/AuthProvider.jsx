@@ -8,13 +8,15 @@ export default function AuthProvider({ children }) {
 
     const login = async (credentials) => {
         const { data } = await axios.post("http://localhost:8000/api/accounts/login/", credentials);
+        axios.defaults.withCredentials = true;
+
         setToken(data.access);
     };
 
     const logout = async () => {
         try {
             await axios.post("http://localhost:8000/api/accounts/logout/"); // Lets the server clear the refresh cookie
-        } catch (_) {}
+        } catch (_) { }
 
         setToken(null);
     }
@@ -35,46 +37,47 @@ export default function AuthProvider({ children }) {
         // On success, we can just forward through the response object
         // On an error, we ask for a new refresh token and resend the request with the new token
         const refreshInterceptor = axios.interceptors.response.use((response) => response,
-        async (error) => {
-            const originalRequest = error.config; // The request that failed
+            async (error) => {
+                const originalRequest = error.config; // The request that failed
+                const isAuthUrl = originalRequest.url?.includes("/accounts/");
 
-            if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
-                originalRequest._retry = true; // ._retry is a custom field; it checks whether this request is going to be resent a 2nd time
+                if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry && !isAuthUrl) {
+                    originalRequest._retry = true; // ._retry is a custom field; it checks whether this request is going to be resent a 2nd time
 
-                try {
-                    const refreshResponse = await axios.post("http://localhost:8000/api/accounts/login/refresh/");
-                    const newAccessToken = refreshResponse.data.access;
+                    try {
+                        const refreshResponse = await axios.post("http://localhost:8000/api/accounts/login/refresh/");
+                        const newAccessToken = refreshResponse.data.access;
 
-                    setToken(newAccessToken);
+                        setToken(newAccessToken);
 
-                    // Difference between this and axios.defaults.headers.common["Authorization"] is that this is for one specific request
-                    // axios.defaults.headers.common["Authorization"] is for all future requests (global header settings)
-                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`; 
+                        // Difference between this and axios.defaults.headers.common["Authorization"] is that this is for one specific request
+                        // axios.defaults.headers.common["Authorization"] is for all future requests (global header settings)
+                        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-                    return axios(originalRequest);
-                }           
-        
-                catch (refreshError) {
-                    setToken(null);
-                    return Promise.reject(refreshError);
+                        return axios(originalRequest);
+                    }
+
+                    catch (refreshError) {
+                        setToken(null);
+                        return Promise.reject(refreshError);
+                    }
                 }
+
+                return Promise.reject(error);
             }
+        );
 
-            return Promise.reject(error);
-        }
-    );
-
-    return () => {
-        axios.interceptors.response.eject(refreshInterceptor);
-    };
+        return () => {
+            axios.interceptors.response.eject(refreshInterceptor);
+        };
     }, []);
 
 
-   return (
-    <AuthContext.Provider value={{token, login, logout}}>
-        {children}
-    </AuthContext.Provider>
-   )
+    return (
+        <AuthContext.Provider value={{ token, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    )
 }
 
 export const useAuthProvider = () => {
