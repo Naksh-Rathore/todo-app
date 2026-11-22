@@ -3,6 +3,7 @@ import styles from "./LoginForm.module.css";
 import { useState, useEffect } from "react";
 
 import { useAuthProvider } from "../../../AuthProvider.jsx";
+import axios from "axios";
 
 export default function LoginForm() {
     const [username, setUsername] = useState("");
@@ -13,6 +14,15 @@ export default function LoginForm() {
     const submitForm = async e => {
         e.preventDefault();
         await login({ "username": username, "password": password });
+
+        try {
+            const response = await axios.get("http://localhost:8000/api/accounts/user/");
+            console.log(response.data);
+        }
+
+        catch (err) {
+            console.error(err.response?.status, err.response?.data); 
+        }
     }
 
     useEffect(() => {

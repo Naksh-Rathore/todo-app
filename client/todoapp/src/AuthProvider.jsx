@@ -1,15 +1,21 @@
-import { createContext, useContext, useLayoutEffect, useState } from "react";
+import { createContext, useContext, useLayoutEffect, useState, useRef } from "react";
 import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
-    const [token, setToken] = useState(); // Keep the token only in application memory so it is less vulnerable to XSS
+    const [token, setTokenState] = useState();
+    const tokenRef = useRef(null);
+
+    const setToken = (t) => {
+        tokenRef.current = t;   // Available instantly
+        setTokenState(t);       // For UI re-renders
+    };
 
     const login = async (credentials) => {
         const { data } = await axios.post("http://localhost:8000/api/accounts/login/", credentials);
-        axios.defaults.withCredentials = true;
-
         setToken(data.access);
     };
 
@@ -22,16 +28,14 @@ export default function AuthProvider({ children }) {
     }
 
     useLayoutEffect(() => {
-        if (token) {
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Add the token to our HTTP requests if it exists
-        }
+        const reqInterceptor = axios.interceptors.request.use(config => {
+            if (tokenRef.current) {
+                config.headers.Authorization = `Bearer ${tokenRef.current}`;
+            }
 
-        else {
-            delete axios.defaults.headers.common["Authorization"]; // Remove the token from our HTTP requests if it does not exist
-        }
-    }, [token]);
+            return config;
+        });
 
-    useLayoutEffect(() => {
         // axios.interceptors.response.use() sets up an interceptor, which is a hook that runs on every request/response
         // axios.interceptors.response.use() has two parameters, onSuccess and onError
         // On success, we can just forward through the response object
@@ -69,6 +73,7 @@ export default function AuthProvider({ children }) {
 
         return () => {
             axios.interceptors.response.eject(refreshInterceptor);
+            axios.interceptors.request.eject(reqInterceptor);
         };
     }, []);
 

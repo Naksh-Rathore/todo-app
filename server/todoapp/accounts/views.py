@@ -9,6 +9,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import UserSerializer
 
@@ -133,3 +134,12 @@ class LogoutView(APIView):
             samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
         )
         return response
+
+class UserInformationView(APIView):  
+    permission_classes = [IsAuthenticated]
+      
+    def get(self, request):
+        print(type(request.user), request.user.is_authenticated, request.user.id, request.auth)
+        user = request.user
+
+        return Response({"username": user.username})
