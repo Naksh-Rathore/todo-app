@@ -13,7 +13,7 @@ export default function LoginForm() {
 
     const navigate = useNavigate();
 
-    const { login } = useAuthProvider();
+    const { login, isAuthenticated, isLoading } = useAuthProvider();
 
     const submitForm = async e => {
         e.preventDefault();
@@ -40,8 +40,7 @@ export default function LoginForm() {
                 <input className={styles.inputFields} type="password" placeholder="Password" value={password} onChange={e => { setPassword(e.target.value) }} />
             </div>
 
-            <button className={styles.submitButton} type="submit">Log In</button>
-
+            {!isAuthenticated && !isLoading && <button className={styles.submitButton} type="submit">Log In</button>}
             <p className={styles.loginMsg}>{loginMsg}</p>
         </form>
     );
