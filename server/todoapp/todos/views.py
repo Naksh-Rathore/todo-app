@@ -51,3 +51,5 @@ class TodoDeleteView(APIView):
         todo.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Refactor GET endpoints to return the projects with the todos inside
