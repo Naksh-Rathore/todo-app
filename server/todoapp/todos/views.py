@@ -8,17 +8,6 @@ from .serializers import TodoSerializer, ProjectSerializer
 from .models import Todo, Project
 
 
-class ProjectCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        serializer = ProjectSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
 class ProjectDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -52,4 +41,21 @@ class TodoDeleteView(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# Refactor GET endpoints to return the projects with the todos inside
+class ProjectListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        projects = (
+            Project.objects
+            .filter(user=request.user)
+            .prefetch_related("todos")  # avoids one query per project (N+1)
+        )
+        serializer = ProjectSerializer(projects, many=True) # Each project holds the nested Todos
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ProjectSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
