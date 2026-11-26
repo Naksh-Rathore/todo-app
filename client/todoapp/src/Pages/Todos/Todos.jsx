@@ -1,3 +1,7 @@
+// To Do: Make a card component for each project
+// When that is done, work on the todos in each project
+// To represent the priority, have a colour around the checkbox on each todo
+
 import styles from "./Todos.module.css"
 
 import Header from "../../Header/Header.jsx";
