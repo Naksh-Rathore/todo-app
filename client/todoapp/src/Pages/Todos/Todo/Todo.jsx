@@ -1,9 +1,14 @@
 import styles from "./Todo.module.css";
 
+import { useState, useEffect } from "react";
+
 export default function Todo({ text, priority, isDone }) {
+    const [isDoneState, setIsDoneState] = useState(isDone);
+
     return (
-        <span className={styles.container}>
+        <div className={styles.container}>
+            <input type="checkbox" name="isDone" checked={isDoneState} onChange={e => { setIsDoneState(e.target.checked) }} />
             {text}
-        </span>
+        </div>
     )
 }
