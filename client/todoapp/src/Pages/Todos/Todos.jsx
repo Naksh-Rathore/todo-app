@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuthProvider } from "../../AuthProvider.jsx";
 
+import ProjectCard from "./ProjectCard/ProjectCard.jsx";
+
 export default function Todos() {
     const [username, setUsername] = useState("");
     const { isAuthenticated, isLoading, logout } = useAuthProvider();
@@ -46,6 +48,10 @@ export default function Todos() {
                     <h2 className={styles.welcomeText}>Welcome {username}</h2>
                     <button className={styles.signOutBtn} onClick={signOut}>Sign Out</button>
                 </Header>
+            </div>
+
+            <div className={styles.projectGrid}>
+                <ProjectCard name="Hello" dateCreated="today" />
             </div>
         </div>
     );
