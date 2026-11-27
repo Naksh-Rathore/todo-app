@@ -7,9 +7,7 @@ export default function ProjectCard({ name, dateCreated, todos }) {
         <article className={styles.card}>
             <div className={styles.scrollArea}>
                 {todos.map(todo => (
-                    <div>
-                        <Todo key={todo.id} text={todo.name} priority={todo.priority} isDone={todo.is_done} />
-                    </div>
+                    <Todo key={todo.id} text={todo.name} priority={todo.priority} isDone={todo.is_done} />
                 ))}
             </div>
 
