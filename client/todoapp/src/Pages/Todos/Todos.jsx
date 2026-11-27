@@ -60,7 +60,7 @@ export default function Todos() {
 
             <div className={styles.projectGrid}>
                 {todoData.map(project => (
-                    <ProjectCard key={project.id} name={project.name} dateCreated={new Date(project.date_created).toLocaleDateString("en-CA")}/>
+                    <ProjectCard key={project.id} name={project.name} dateCreated={new Date(project.date_created).toLocaleDateString("en-CA")} todos={project.todos}/>
                 ))}
             </div>
         </div>

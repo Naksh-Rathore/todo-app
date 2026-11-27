@@ -1,10 +1,16 @@
 import styles from "./ProjectCard.module.css";
 
-export default function ProjectCard({ name, dateCreated }) {
+import Todo from "../Todo/Todo.jsx";
+
+export default function ProjectCard({ name, dateCreated, todos }) {
     return (
         <article className={styles.card}>
             <div className={styles.scrollArea}>
-                {/* todos will go here later */}
+                {todos.map(todo => (
+                    <div>
+                        <Todo key={todo.id} text={todo.name} priority={todo.priority} isDone={todo.is_done} />
+                    </div>
+                ))}
             </div>
 
             <div className={styles.titleSection}>
