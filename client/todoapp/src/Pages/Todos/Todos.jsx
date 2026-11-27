@@ -28,6 +28,12 @@ export default function Todos() {
         fetchUsername();
     }, [isLoading, isAuthenticated]);
 
+    useEffect(() => {
+        if (!isAuthenticated && !isLoading) {
+            navigate("/login");
+        }
+    }, [isLoading, isAuthenticated, navigate]); // isLoading is in the dependency array since the first time we render is it almost always true
+
     const signOut = async () => {
         await logout();
         navigate("/");
