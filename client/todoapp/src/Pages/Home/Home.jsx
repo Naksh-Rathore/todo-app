@@ -7,14 +7,19 @@ import Testimonials from "./Testimonials/Testimonials.jsx";
 
 import { Link } from "react-router-dom";
 
+import { useAuthProvider } from "../../AuthProvider.jsx";
+
 export default function Home() {
+    const { isAuthenticated, isLoading } = useAuthProvider();
+
     return (
         <div className={styles.container}>
             <Header>
                 <h2 className={styles.text}>The Todo App For The Superior</h2>
 
                 <button className={styles.signinbtn}>
-                    <Link to="/login" className={styles.signinlink}>Sign In</Link>
+                    {isAuthenticated && !isLoading ? <Link to="/todos" className={styles.signinlink}>View Todos</Link>
+                                                   : <Link to="/login" className={styles.signinlink}>Sign In</Link>}
                 </button>
             </Header>
 
