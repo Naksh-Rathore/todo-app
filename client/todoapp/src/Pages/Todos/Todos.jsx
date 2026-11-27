@@ -17,6 +17,8 @@ export default function Todos() {
     const [username, setUsername] = useState("");
     const { isAuthenticated, isLoading, logout } = useAuthProvider();
 
+    const [todoData, setTodoData] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +29,13 @@ export default function Todos() {
             setUsername(data.username);
         };
 
+        const fetchTodos = async () => {
+            const { data: todos } = await axios.get("http://localhost:8000/api/todos/projects/");
+            setTodoData(todos);
+        };
+
         fetchUsername();
+        fetchTodos();
     }, [isLoading, isAuthenticated]);
 
     useEffect(() => {
@@ -51,7 +59,9 @@ export default function Todos() {
             </div>
 
             <div className={styles.projectGrid}>
-                <ProjectCard name="Hello" dateCreated="today" />
+                {todoData.map(project => (
+                    <ProjectCard key={project.id} name={project.name} dateCreated={new Date(project.date_created).toLocaleDateString("en-CA")}/>
+                ))}
             </div>
         </div>
     );
