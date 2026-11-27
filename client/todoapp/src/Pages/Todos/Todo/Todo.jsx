@@ -1,6 +1,6 @@
 import styles from "./Todo.module.css";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Todo({ text, priority, isDone }) {
     const [isDoneState, setIsDoneState] = useState(isDone);
